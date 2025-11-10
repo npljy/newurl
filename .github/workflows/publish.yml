@@ -9,6 +9,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest # 运行环境为最新版 Ubuntu
@@ -26,10 +30,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: 安装全局依赖 # step2
-        run: |
-          npm config set registry https://registry.npmjs.org/
 
       - name: 安装 node modules 依赖 # step3 name
         run: npm install # 安装 node modules 相关依赖
