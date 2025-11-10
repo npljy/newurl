@@ -11,42 +11,39 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # 运行环境为最新版 Ubuntu
+    # runs-on: windows-latest # 运行环境为最新版 Ubuntu
 
     strategy:
       matrix:
-        node-version: [16.x]
-
+        node-version: [22.x]
     steps:
-    - name: Chekout # step1 获取源码
-      uses: actions/checkout@main # 使用 actions/checkout@v4
-      with:
+      - name: 检出最新代码 # step1 获取源码
+        uses: actions/checkout@v4 # 使用 actions/checkout@v4
+        with:
           persist-credentials: false
+      - name: 使用 Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Cache node modules # step2
-      uses: actions/cache@main # 使用 actions/cache@v4
-      id: cache
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      - name: 安装全局依赖 # step2
+        run: |
+          npm config set registry https://registry.npmjs.org/
 
-    - name: Install Dependencies # step3 name
-      if: steps.cache.outputs.cache-hit != 'true' # 如果变量 cache-hit 不等于 true
-      run: npm install # 安装 node modules 相关依赖
+      - name: 安装 node modules 依赖 # step3 name
+        run: npm install # 安装 node modules 相关依赖
 
-    - name: Build
-      run: npm run build
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@main
-      with:
-        node-version: ${{ matrix.node-version }}
-        registry-url: https://registry.npmjs.org
+      - name: Build
+        run: npm run build
+      
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@main
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: https://registry.npmjs.org
 
-    - name: Publish
-      run: npm publish .
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      - name: Publish
+        run: npm publish .
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
