@@ -30,21 +30,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
 
       - name: 安装 node modules 依赖 # step3 name
-        run: npm install # 安装 node modules 相关依赖
-
-      - name: CI
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-      
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@main
-        with:
-          node-version: ${{ matrix.node-version }}
-          registry-url: https://registry.npmjs.org
+        run: |
+          npm install -g npm@latest
+          npm install # 安装 node modules 相关依赖
+          npm run build
+          npm ci
 
       - name: Publish
         run: npm publish .
