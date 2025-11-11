@@ -41,6 +41,7 @@ jobs:
           registry-url: https://registry.npmjs.org
       - name: 发布npm
         run: |
+          npm version patch
           npm publish .
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
