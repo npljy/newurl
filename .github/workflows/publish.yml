@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [20.x]
     steps:
       - name: 检出最新代码 # step1 获取源码
         uses: actions/checkout@v4 # 使用 actions/checkout@v4
