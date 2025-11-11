@@ -5,7 +5,7 @@
   "private": false,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "node updatePkgVer.js && webpack"
   },
   "keywords": [
     "URL"
@@ -28,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/npljy/newurl/issues"
   },
-  "main": "index.js"
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^1.13.2"
+  }
 }
